@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>timekeeper</class>
+ <widget class="QMainWindow" name="timekeeper">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>354</width>
+    <height>260</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Time Keeper</string>
+  </property>
+  <widget class="QWidget" name="_centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QFormLayout" name="_formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="_timeLit">
+        <property name="text">
+         <string>Time:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="_time">
+        <property name="text">
+         <string>-- Current Time --</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="_taskLit">
+        <property name="text">
+         <string>&amp;Task:</string>
+        </property>
+        <property name="buddy">
+         <cstring>_task</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="_task"/>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="_buttonLayout">
+        <item>
+         <widget class="QPushButton" name="_start">
+          <property name="text">
+           <string>&amp;Begin</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="_stop">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>&amp;End</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="_notesLit">
+      <property name="text">
+       <string>&amp;Notes</string>
+      </property>
+      <property name="buddy">
+       <cstring>_notes</cstring>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="_notes">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>354</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="_fileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="_taskAction"/>
+    <addaction name="_reportAction"/>
+   </widget>
+   <addaction name="_fileMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="_taskAction">
+   <property name="text">
+    <string>&amp;Tasks...</string>
+   </property>
+  </action>
+  <action name="action_Summary">
+   <property name="text">
+    <string>&amp;Summary</string>
+   </property>
+  </action>
+  <action name="_reportAction">
+   <property name="text">
+    <string>&amp;Report...</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>_task</tabstop>
+  <tabstop>_start</tabstop>
+  <tabstop>_stop</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
