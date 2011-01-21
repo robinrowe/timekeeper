@@ -25,9 +25,11 @@ class timekeeper : public QMainWindow, public Ui::timekeeper
     void sTask();
     void sReport();
     void sSave();
+    void sAbout();
 
     void sStart();
     void sStop();
+
 
   protected:
     void closeEvent(QCloseEvent * event);

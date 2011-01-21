@@ -22,6 +22,7 @@ timekeeper::timekeeper()
   connect(&_ticktock, SIGNAL(timeout()), this, SLOT(sTick()));
   connect(_taskAction, SIGNAL(triggered()), this, SLOT(sTask()));
   connect(_reportAction, SIGNAL(triggered()), this, SLOT(sReport()));
+  connect(_aboutAction, SIGNAL(triggered()), this, SLOT(sAbout()));
   connect(_start, SIGNAL(clicked()), this, SLOT(sStart()));
   connect(_stop, SIGNAL(clicked()), this, SLOT(sStop()));
 
@@ -255,6 +256,11 @@ void timekeeper::sStart()
   _task->setEnabled(false);
   _taskAction->setEnabled(false);
   _notes->clear();
+}
+
+void timekeeper::sAbout()
+{
+  QMessageBox::about(this, tr("About Time Keeper"), tr("Time Keeper 0.0.1"));
 }
 
 void timekeeper::sStop()

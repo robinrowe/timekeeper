@@ -104,8 +104,17 @@
     </property>
     <addaction name="_taskAction"/>
     <addaction name="_reportAction"/>
+    <addaction name="separator"/>
+    <addaction name="_exitAction"/>
+   </widget>
+   <widget class="QMenu" name="_helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="_aboutAction"/>
    </widget>
    <addaction name="_fileMenu"/>
+   <addaction name="_helpMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="_taskAction">
@@ -123,6 +132,16 @@
     <string>&amp;Report...</string>
    </property>
   </action>
+  <action name="_exitAction">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="_aboutAction">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>_task</tabstop>
@@ -130,5 +149,22 @@
   <tabstop>_stop</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>_exitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>timekeeper</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>176</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>176</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
