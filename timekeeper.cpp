@@ -260,7 +260,7 @@ void timekeeper::sStart()
 
 void timekeeper::sAbout()
 {
-  QMessageBox::about(this, tr("About Time Keeper"), tr("Time Keeper 0.0.1"));
+  QMessageBox::about(this, tr("About Time Keeper"), tr("Time Keeper 0.0.2"));
 }
 
 void timekeeper::sStop()
