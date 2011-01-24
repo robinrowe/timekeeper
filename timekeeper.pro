@@ -27,6 +27,7 @@ FORMS += tasklist.ui timekeeper.ui timereport.ui
 SOURCES += main.cpp tasklist.cpp timekeeper.cpp timereport.cpp
 
 QT += xml
+CONFIG -= debug
 
 RESOURCES += timekeeper.qrc
 
