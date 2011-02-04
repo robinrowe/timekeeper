@@ -160,14 +160,19 @@ void timekeeper::sReport()
   {
     timeentry * te = _entries.at(i);
     int secs = te->_start.secsTo(te->_stop.isValid() ? te->_stop : QDateTime::currentDateTime());
+    QTime interval(0, 0);
+    interval = interval.addSecs(secs);
+
     if(map.contains(te->_task))
       secs += map.value(te->_task);
     map[te->_task] = secs;
     QString text;
+    text = te->_start.toString("H:mm") + " - " + te->_stop.toString("H:mm") + "\t(" + interval.toString("H:mm") + ")\n\n";
     if(!te->_notesStart.isEmpty())
-      text = te->_start.toString("H:mm") + "\t" + te->_notesStart + "\n\n";
+      text += "Start:\t" + te->_notesStart + "\n";
     if(!te->_notesStop.isEmpty())
-      text += te->_stop.toString("H:mm") + "\t" + te->_notesStop + "\n\n";
+      text += "Stop:\t" + te->_notesStop + "\n";
+
     if(!text.isEmpty())
     {
       if(map2.contains(te->_task))
@@ -187,6 +192,7 @@ void timekeeper::sReport()
     report += it.key();
     report += "\t";
     report += tm.toString("H:mm");
+    report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
     report += "\n======================================\n";
     report += map2.value(it.key());
     report += "\n\n";
