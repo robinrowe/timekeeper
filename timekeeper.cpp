@@ -181,7 +181,9 @@ void timekeeper::sReport()
     }
   }
 
-  QString report;
+  QString report = QDate::currentDate().toString("'Printed' MMM dd, yyyy");
+  report += "\n======================================\n";
+
   QMapIterator<QString, int> it(map);
   while(it.hasNext())
   {

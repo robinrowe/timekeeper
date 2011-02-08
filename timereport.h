@@ -12,6 +12,9 @@ class timereport : public QDialog, public Ui::timereport
   public:
     timereport(QWidget * parent = 0, Qt::WindowFlags f = 0);
     virtual ~timereport();
+
+  public slots:
+    void sPrint();
 };
 
 #endif // __TIMEREPORT_H__
