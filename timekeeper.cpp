@@ -184,11 +184,13 @@ void timekeeper::sReport()
   QString report = QDate::currentDate().toString("'Printed' MMM dd, yyyy");
   report += "\n======================================\n";
 
+  int totSecs = 0;
   QMapIterator<QString, int> it(map);
   while(it.hasNext())
   {
     it.next();
     int secs = it.value();
+    totSecs += secs;
     QTime tm(0, 0);
     tm = tm.addSecs(secs);
     report += it.key();
@@ -199,6 +201,13 @@ void timekeeper::sReport()
     report += map2.value(it.key());
     report += "\n\n";
   }
+
+  QTime tm(0, 0);
+  tm = tm.addSecs(totSecs);
+  report += "Total\t";
+  report += tm.toString("H:mm");
+  report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
+  report += "\n======================================\n";
 
   timereport dlg(this);
   dlg._report->setPlainText(report);
