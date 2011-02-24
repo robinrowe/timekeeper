@@ -9,6 +9,7 @@
 
 #include "ui_timekeeper.h"
 
+class QFile;
 class timeentry;
 
 class timekeeper : public QMainWindow, public Ui::timekeeper
@@ -24,6 +25,7 @@ class timekeeper : public QMainWindow, public Ui::timekeeper
 
     void sTask();
     void sReport();
+    void sOpen();
     void sSave();
     void sAbout();
 
@@ -33,6 +35,8 @@ class timekeeper : public QMainWindow, public Ui::timekeeper
 
   protected:
     void closeEvent(QCloseEvent * event);
+    QFile *getFile(QDate date);
+    bool   parseFile(QFile * file, QList<timeentry*> &entries, QString &errmsg);
 
   private:
     QTimer _ticktock;

@@ -1,9 +1,12 @@
 #ifndef __TIMEREPORT_H__
 #define __TIMEREPORT_H__
 
+#include <QList>
 #include <QDialog>
 
 #include "ui_timereport.h"
+
+#include "timeentry.h"
 
 class timereport : public QDialog, public Ui::timereport
 {
@@ -14,6 +17,7 @@ class timereport : public QDialog, public Ui::timereport
     virtual ~timereport();
 
   public slots:
+    void setEntries(QList<timeentry*> &entries);
     void sPrint();
 };
 

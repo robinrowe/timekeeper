@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>354</width>
-    <height>260</height>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -95,7 +95,7 @@
      <x>0</x>
      <y>0</y>
      <width>354</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="_fileMenu">
@@ -104,6 +104,8 @@
     </property>
     <addaction name="_taskAction"/>
     <addaction name="_reportAction"/>
+    <addaction name="separator"/>
+    <addaction name="_openAction"/>
     <addaction name="separator"/>
     <addaction name="_exitAction"/>
    </widget>
@@ -142,6 +144,14 @@
     <string>&amp;About</string>
    </property>
   </action>
+  <action name="_openAction">
+   <property name="text">
+    <string>&amp;Open (Read-Only)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open an existing TimeKeeper file for viewing</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>_task</tabstop>
@@ -157,8 +167,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>176</x>
-     <y>132</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>176</x>

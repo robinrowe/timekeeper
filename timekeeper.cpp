@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QFile>
+#include <QFileDialog>
 #include <QTextStream>
 #include <QDomDocument>
 #include <QDebug>
@@ -21,6 +22,7 @@ timekeeper::timekeeper()
 
   connect(&_ticktock, SIGNAL(timeout()), this, SLOT(sTick()));
   connect(_taskAction, SIGNAL(triggered()), this, SLOT(sTask()));
+  connect(_openAction,   SIGNAL(triggered()), this, SLOT(sOpen()));
   connect(_reportAction, SIGNAL(triggered()), this, SLOT(sReport()));
   connect(_aboutAction, SIGNAL(triggered()), this, SLOT(sAbout()));
   connect(_start, SIGNAL(clicked()), this, SLOT(sStart()));
@@ -54,14 +56,27 @@ timekeeper::timekeeper()
     _task->addItem("--None Specified--");
 
   // load any file that exists already for today
-  QString dn = QDate::currentDate().toString("yyyyMMMdd");
-  QFile f(_home.absolutePath() + "/" + dn + ".xml");
-  if(f.exists())
+  QFile *f = getFile(QDate::currentDate());
+  QString errmsg;
+  if (! parseFile(f, _entries, errmsg) && ! errmsg.isEmpty())
+    QMessageBox::critical(this, tr("Initialization Error"), errmsg);
+
+  sTick();
+  _ticktock.start(60000);
+}
+
+timekeeper::~timekeeper()
+{
+}
+
+bool timekeeper::parseFile(QFile *file, QList<timeentry*> &entries, QString &errmsg)
+{
+  if(file && file->exists())
   {
     QDomDocument doc = QDomDocument();
     QString errMsg;
     int errLine, errCol;
-    if(doc.setContent(&f, &errMsg, &errLine, &errCol))
+    if(doc.setContent(file, &errMsg, &errLine, &errCol))
     {
       QDomElement root = doc.documentElement();
       if(root.tagName() == "TimeKeeper")
@@ -90,29 +105,61 @@ timekeeper::timekeeper()
               else if(elemThis.tagName() == "stop")
                 te->_stop = QDateTime::fromString(elemThis.text());
             }
-            _entries.append(te);
+            entries.append(te);
           }
         }
+        return true;
       }
       else
-        QMessageBox::critical(this, tr("Initialization Error"),
-          tr("Existing daily log does not appear to be a valid TimeKeeper log."));
+        errmsg =
+          tr("Existing daily log does not appear to be a valid TimeKeeper log.");
     }
     else
-      QMessageBox::critical(this, tr("Initialization Error"),
+      errmsg = 
         tr("Encountered an error while parsing %1\n\n%2 (Line %3 Column %4)")
-        .arg(dn + ".xml")
+        .arg(file->fileName())
         .arg(errMsg)
         .arg(errLine)
-        .arg(errCol));
+        .arg(errCol);
   }
 
-  sTick();
-  _ticktock.start(60000);
+  return false;
 }
 
-timekeeper::~timekeeper()
+QFile *timekeeper::getFile(QDate date)
 {
+  // get the file for the given date. if date.isNull then let the user choose.
+  QFile *thefile = 0;
+  if (date.isNull())
+    QMessageBox::critical(this, tr("Not Implemented"),
+                          tr("Don't know how to open files for other dates"));
+  else
+    thefile = new QFile(_home.absolutePath() + QDir::separator() +
+                        date.toString("yyyyMMMdd") + ".xml");
+
+  return thefile;
+}
+
+void timekeeper::sOpen()
+{
+  QString filename = QFileDialog::getOpenFileName(this,
+                                                  tr("Select a TimeKeeper File"),
+                                                  _home.absolutePath(),
+                                                  tr("TimeKeeper files (*.xml)"),
+                                                  0,
+                                                  QFileDialog::ReadOnly);
+  QFile file(filename);
+  if (file.open(QIODevice::ReadOnly))
+  {
+    QList<timeentry*> tmpentries;
+    QString errmsg;
+    if (parseFile(&file, tmpentries, errmsg))
+    {
+      timereport dlg(this);
+      dlg.setEntries(tmpentries);
+      dlg.exec();
+    }
+  }
 }
 
 void timekeeper::sTick()
@@ -154,63 +201,8 @@ void timekeeper::sTask()
 
 void timekeeper::sReport()
 {
-  QMap<QString, int> map;
-  QMap<QString, QString> map2;
-  for (int i = 0; i < _entries.size(); ++i)
-  {
-    timeentry * te = _entries.at(i);
-    int secs = te->_start.secsTo(te->_stop.isValid() ? te->_stop : QDateTime::currentDateTime());
-    QTime interval(0, 0);
-    interval = interval.addSecs(secs);
-
-    if(map.contains(te->_task))
-      secs += map.value(te->_task);
-    map[te->_task] = secs;
-    QString text;
-    text = te->_start.toString("H:mm") + " - " + te->_stop.toString("H:mm") + "\t(" + interval.toString("H:mm") + ")\n\n";
-    if(!te->_notesStart.isEmpty())
-      text += "Start:\t" + te->_notesStart + "\n";
-    if(!te->_notesStop.isEmpty())
-      text += "Stop:\t" + te->_notesStop + "\n";
-
-    if(!text.isEmpty())
-    {
-      if(map2.contains(te->_task))
-        text = map2.value(te->_task) + "\n\n" + text;
-      map2[te->_task] = text;
-    }
-  }
-
-  QString report = QDate::currentDate().toString("'Printed' MMM dd, yyyy");
-  report += "\n======================================\n";
-
-  int totSecs = 0;
-  QMapIterator<QString, int> it(map);
-  while(it.hasNext())
-  {
-    it.next();
-    int secs = it.value();
-    totSecs += secs;
-    QTime tm(0, 0);
-    tm = tm.addSecs(secs);
-    report += it.key();
-    report += "\t";
-    report += tm.toString("H:mm");
-    report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
-    report += "\n======================================\n";
-    report += map2.value(it.key());
-    report += "\n\n";
-  }
-
-  QTime tm(0, 0);
-  tm = tm.addSecs(totSecs);
-  report += "Total\t";
-  report += tm.toString("H:mm");
-  report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
-  report += "\n======================================\n";
-
   timereport dlg(this);
-  dlg._report->setPlainText(report);
+  dlg.setEntries(_entries);
   dlg.exec();
 }
 
@@ -247,13 +239,12 @@ void timekeeper::sSave()
     root.appendChild(entry);
   }
 
-  QString dn = QDate::currentDate().toString("yyyyMMMdd");
-  QFile tf(_home.absolutePath() + "/" + dn + ".xml");
-  if(tf.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
+  QFile *tf = getFile(QDate::currentDate());
+  if(tf->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
   {
-    QTextStream ts(&tf);
+    QTextStream ts(tf);
     ts << doc.toString();
-    tf.close();
+    tf->close();
   }
   else
     QMessageBox::critical(this, tr("Save Error"), tr("Could not access the configuration files."));
