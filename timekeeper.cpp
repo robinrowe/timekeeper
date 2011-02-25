@@ -1,4 +1,5 @@
 
+#include "prefs.h"
 #include "timekeeper.h"
 #include "tasklist.h"
 #include "timeentry.h"
@@ -23,6 +24,7 @@ timekeeper::timekeeper()
   connect(&_ticktock, SIGNAL(timeout()), this, SLOT(sTick()));
   connect(_taskAction, SIGNAL(triggered()), this, SLOT(sTask()));
   connect(_openAction,   SIGNAL(triggered()), this, SLOT(sOpen()));
+  connect(_prefsAction,  SIGNAL(triggered()), this, SLOT(sPrefs()));
   connect(_reportAction, SIGNAL(triggered()), this, SLOT(sReport()));
   connect(_aboutAction, SIGNAL(triggered()), this, SLOT(sAbout()));
   connect(_start, SIGNAL(clicked()), this, SLOT(sStart()));
@@ -54,6 +56,8 @@ timekeeper::timekeeper()
   }
   if(_task->count() == 0)
     _task->addItem("--None Specified--");
+
+  prefs::applyPrefs(_notes, prefs::Display);
 
   // load any file that exists already for today
   QFile *f = getFile(QDate::currentDate());
@@ -197,6 +201,13 @@ void timekeeper::sTask()
   }
   else
     QMessageBox::critical(this, tr("Initialization Error"), tr("Could not access the configuration files."));
+}
+
+void timekeeper::sPrefs()
+{
+  prefs dlg(this);
+  if (dlg.exec() == QDialog::Accepted)
+    prefs::applyPrefs(_notes, prefs::Display);
 }
 
 void timekeeper::sReport()

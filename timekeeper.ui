@@ -107,6 +107,8 @@
     <addaction name="separator"/>
     <addaction name="_openAction"/>
     <addaction name="separator"/>
+    <addaction name="_prefsAction"/>
+    <addaction name="separator"/>
     <addaction name="_exitAction"/>
    </widget>
    <widget class="QMenu" name="_helpMenu">
@@ -150,6 +152,11 @@
    </property>
    <property name="toolTip">
     <string>Open an existing TimeKeeper file for viewing</string>
+   </property>
+  </action>
+  <action name="_prefsAction">
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

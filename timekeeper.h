@@ -24,6 +24,7 @@ class timekeeper : public QMainWindow, public Ui::timekeeper
     void sTick();
 
     void sTask();
+    void sPrefs();
     void sReport();
     void sOpen();
     void sSave();

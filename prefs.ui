@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>prefs</class>
+ <widget class="QDialog" name="prefs">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>549</width>
+    <height>108</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TimeKeeper Preferences</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="_entryLit">
+       <property name="text">
+        <string>Text Entry:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="_reportLit">
+       <property name="text">
+        <string>Report:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="_entryLyt">
+       <item>
+        <widget class="QFontComboBox" name="_entryFont"/>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="_entrySize"/>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="1">
+      <layout class="QHBoxLayout" name="_reportLyt">
+       <item>
+        <widget class="QFontComboBox" name="_reportFont"/>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="_reportSize"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDialogButtonBox" name="_buttonBox">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>_entryFont</tabstop>
+  <tabstop>_entrySize</tabstop>
+  <tabstop>_reportFont</tabstop>
+  <tabstop>_reportSize</tabstop>
+  <tabstop>_buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>_buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>prefs</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>504</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>-6</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

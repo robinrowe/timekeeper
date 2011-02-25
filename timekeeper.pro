@@ -22,9 +22,9 @@ macx {
 }
 
 # Input
-HEADERS += tasklist.h timekeeper.h timereport.h
-FORMS += tasklist.ui timekeeper.ui timereport.ui
-SOURCES += main.cpp tasklist.cpp timekeeper.cpp timereport.cpp
+HEADERS +=          prefs.h   tasklist.h   timekeeper.h   timereport.h
+FORMS   +=          prefs.ui  tasklist.ui  timekeeper.ui  timereport.ui
+SOURCES += main.cpp prefs.cpp tasklist.cpp timekeeper.cpp timereport.cpp
 
 QT += xml
 CONFIG -= debug
