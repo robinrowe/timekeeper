@@ -25,6 +25,8 @@ prefs::prefs(QWidget *parent, Qt::WindowFlags f)
     _reportFont->setCurrentFont(QFont(settings.value("FontName").toString()));
   if (settings.contains("FontSize"))
     _reportSize->setValue(settings.value("FontSize").toInt());
+  if (settings.contains("HideStartStop"))
+    _hideStartStop->setChecked(settings.value("HideStartStop").toBool());
   settings.endGroup();
 }
 
@@ -77,6 +79,10 @@ void prefs::sSave()
     settings.remove("FontSize");
   else
     settings.setValue("FontSize", _reportSize->value());
+  if (_hideStartStop->isChecked())
+    settings.setValue("HideStartStop", _hideStartStop->isChecked());
+  else
+    settings.remove("HideStartStop");
   settings.endGroup();
 
   accept();
@@ -108,4 +114,11 @@ int prefs::reportFontSize()
   QSettings settings("xtuple.com", "timekeeper");
   settings.beginGroup("report");
   return settings.value("FontSize", -1).toInt();
+}
+
+bool prefs::showStartStop()
+{
+  QSettings settings("xtuple.com", "timekeeper");
+  settings.beginGroup("report");
+  return ! settings.value("HideStartStop", false).toBool();
 }

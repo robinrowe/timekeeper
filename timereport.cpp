@@ -24,6 +24,8 @@ void timereport::setEntries(QList<timeentry*> &entries)
   QMap<QString, int> map;
   QMap<QString, QString> map2;
   QDate firstdate = QDate::currentDate();
+  bool  showStartStop = prefs::showStartStop();
+
   for (int i = 0; i < entries.size(); ++i)
   {
     timeentry * te = entries.at(i);
@@ -39,9 +41,9 @@ void timereport::setEntries(QList<timeentry*> &entries)
     QString text;
     text = te->_start.toString("H:mm") + " - " + te->_stop.toString("H:mm") + "\t(" + interval.toString("H:mm") + ")\n\n";
     if(!te->_notesStart.isEmpty())
-      text += "Start:\t" + te->_notesStart + "\n";
+      text += (showStartStop ? "Start:\t" : "") + te->_notesStart + "\n";
     if(!te->_notesStop.isEmpty())
-      text += "Stop:\t" + te->_notesStop + "\n";
+      text += (showStartStop ? "Stop:\t" : "")  + te->_notesStop + "\n";
 
     if(!text.isEmpty())
     {

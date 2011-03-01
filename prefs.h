@@ -15,6 +15,7 @@ class prefs : public QDialog, public Ui::prefs
     static int     entryFontSize();
     static QString reportFontName();
     static int     reportFontSize();
+    static bool    showStartStop();
     static void    applyPrefs(QPlainTextEdit *widget, PrefsGroup group = Display);
 
   public slots:
