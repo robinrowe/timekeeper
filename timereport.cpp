@@ -72,15 +72,15 @@ void timereport::setEntries(QList<timeentry*> &entries)
     report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
     report += "\n======================================\n";
     report += map2.value(it.key());
-    report += "\n\n";
+    report += "\n";
   }
 
   QTime tm(0, 0);
   tm = tm.addSecs(totSecs);
-  report += "Total\t";
+  report += "\n======================================\n";
+  report += firstdate.toString("'Total for' MMM dd, yyyy'\t'");
   report += tm.toString("H:mm");
   report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
-  report += "\n======================================\n";
 
   _report->setPlainText(report);
 }
