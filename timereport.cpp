@@ -19,18 +19,26 @@ timereport::~timereport()
 {
 }
 
+// TODO: add rich-text option
 void timereport::setEntries(QList<timeentry*> &entries)
 {
   QMap<QString, int> map;
   QMap<QString, QString> map2;
-  QDate firstdate = QDate::currentDate();
+  QDateTime firstdatetime = QDateTime::currentDateTime();
+  QDateTime lastdatetime  = QDateTime();
   bool  showStartStop = prefs::showStartStop();
 
   for (int i = 0; i < entries.size(); ++i)
   {
     timeentry * te = entries.at(i);
-    if (te->_start.date() < firstdate)
-      firstdate = te->_start.date();
+    if (te->_start < firstdatetime)
+      firstdatetime = te->_start;
+
+    if (te->_stop.isValid() && (lastdatetime > te->_stop || lastdatetime.isNull()))
+      lastdatetime = te->_stop;
+    else 
+      lastdatetime = QDateTime::currentDateTime();
+
     int secs = te->_start.secsTo(te->_stop.isValid() ? te->_stop : QDateTime::currentDateTime());
     QTime interval(0, 0);
     interval = interval.addSecs(secs);
@@ -39,23 +47,22 @@ void timereport::setEntries(QList<timeentry*> &entries)
       secs += map.value(te->_task);
     map[te->_task] = secs;
     QString text;
-    text = te->_start.toString("H:mm") + " - " + te->_stop.toString("H:mm") + "\t(" + interval.toString("H:mm") + ")\n\n";
+    text = te->_start.toString("H:mm") + " - " + te->_stop.toString("H:mm") + "\t(" + interval.toString("H:mm") + ")";
     if(!te->_notesStart.isEmpty())
-      text += (showStartStop ? "Start:\t" : "") + te->_notesStart + "\n";
+      text += (showStartStop ? "\nStart:\t" : "\n") + te->_notesStart + "\n";
     if(!te->_notesStop.isEmpty())
-      text += (showStartStop ? "Stop:\t" : "")  + te->_notesStop + "\n";
+      text += (showStartStop ? "\nStop:\t" : "\n")  + te->_notesStop + "\n";
 
     if(!text.isEmpty())
     {
       if(map2.contains(te->_task))
-        text = map2.value(te->_task) + "\n\n" + text;
+        text = map2.value(te->_task) + "\n" + text;
       map2[te->_task] = text;
     }
   }
 
-  QString report = firstdate.toString("'Timesheet for' MMM dd, yyyy\t") +
-                   QDate::currentDate().toString("'Printed' MMM dd, yyyy");
-  report += "\n======================================\n";
+  QString report = firstdatetime.toString("'Timesheet for' MMM dd, yyyy\t") +
+                   QDate::currentDate().toString("'Printed' MMM dd, yyyy'\n'");
 
   int totSecs = 0;
   QMapIterator<QString, int> it(map);
@@ -66,6 +73,7 @@ void timereport::setEntries(QList<timeentry*> &entries)
     totSecs += secs;
     QTime tm(0, 0);
     tm = tm.addSecs(secs);
+    report += "\n======================================\n";
     report += it.key();
     report += "\t";
     report += tm.toString("H:mm");
@@ -78,9 +86,13 @@ void timereport::setEntries(QList<timeentry*> &entries)
   QTime tm(0, 0);
   tm = tm.addSecs(totSecs);
   report += "\n======================================\n";
-  report += firstdate.toString("'Total for' MMM dd, yyyy'\t'");
-  report += tm.toString("H:mm");
+  report += firstdatetime.toString("MMM dd, yyyy, H:mm'-'");
+  report += lastdatetime.toString("H:mm'\n'");
+  report += tm.toString("'Total: ' H:mm");
   report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
+  QTime breaks = QTime(0, 0).addSecs(lastdatetime.toTime_t() - firstdatetime.toTime_t() - totSecs);
+  report += breaks.toString("'\tbreaks: ' H:mm'\t'");
+  report += "  (" + QString::number(0.0 - breaks.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
 
   _report->setPlainText(report);
 }
