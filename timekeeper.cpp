@@ -289,7 +289,7 @@ void timekeeper::sStop()
     _currentEntry->_notesStop = _notes->toPlainText();
     _currentEntry->_stop = QDateTime::currentDateTime();
   }
-  _currentEntry = false;
+  _currentEntry = 0;
 
   _taskStarted = QDateTime(); // set to null date-time
   _stop->setEnabled(false);

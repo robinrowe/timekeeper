@@ -1,0 +1,6 @@
+*.o
+Makefile*
+*~
+object_script*.Debug
+object_script*.Release
+tmp/
