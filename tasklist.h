@@ -10,7 +10,7 @@ class tasklist : public QDialog, public Ui::tasklist
   Q_OBJECT
 
   public:
-    tasklist(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    tasklist(QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget);
     virtual ~tasklist();
 
   public slots:

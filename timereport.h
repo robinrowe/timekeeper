@@ -13,7 +13,7 @@ class timereport : public QDialog, public Ui::timereport
   Q_OBJECT
 
   public:
-    timereport(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    timereport(QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget);
     virtual ~timereport();
 
   public slots:

@@ -90,7 +90,7 @@ void timereport::setEntries(QList<timeentry*> &entries)
   report += lastdatetime.toString("H:mm'\n'");
   report += tm.toString("'Total: ' H:mm");
   report += "  (" + QString::number(0.0 - tm.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
-  QTime breaks = QTime(0, 0).addSecs(lastdatetime.toTime_t() - firstdatetime.toTime_t() - totSecs);
+  QTime breaks = QTime(0, 0).addSecs(lastdatetime.toMSecsSinceEpoch() / 1000.0 - firstdatetime.toMSecsSinceEpoch() / 1000.0 - totSecs);
   report += breaks.toString("'\tUnaccounted: ' H:mm'\t'");
   report += "  (" + QString::number(0.0 - breaks.secsTo(QTime(0, 0)) / 60.0 / 60.0, 'g', 2) + " hr)";
 

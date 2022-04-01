@@ -9,7 +9,7 @@ class prefs : public QDialog, public Ui::prefs
   public:
     enum PrefsGroup { Display, Paper };
 
-    prefs(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    prefs(QWidget *parent = 0, Qt::WindowFlags f = Qt::Widget);
 
     static QString entryFontName();
     static int     entryFontSize();

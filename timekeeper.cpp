@@ -167,8 +167,11 @@ void timekeeper::sOpen()
 }
 
 void timekeeper::sTick()
-{
-  _time->setText(QDateTime::currentDateTime().toString(Qt::SystemLocaleShortDate));
+{   QLocale::setDefault(QLocale::C);
+    QLocale locale; // Constructs a default QLocale
+    QString s = locale.toString(QDateTime::currentDateTime());
+    _time->setText(s);
+//    _time->setText(QDateTime::currentDateTime().toString(Qt::SystemLocaleShortDate));
 
   if(_lastSave.secsTo(QDateTime::currentDateTime()) > 600)
     sSave();
@@ -194,7 +197,7 @@ void timekeeper::sTask()
       if(ci)
       {
         _task->addItem(ci->text());
-        ts << ci->text() << endl;
+        ts << ci->text() << Qt::endl;
       }
     }
     tf.close();
